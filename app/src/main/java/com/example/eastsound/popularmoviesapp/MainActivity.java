@@ -3,6 +3,8 @@ package com.example.eastsound.popularmoviesapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.eastsound.popularmoviesapp.service.MovieDataParser;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
