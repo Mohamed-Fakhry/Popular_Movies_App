@@ -24,32 +24,57 @@ public class MovieDataParser extends AsyncTask<Object, Void, ArrayList<Movie> >{
 
     private final String LOG_TAG = MovieDataParser.class.getSimpleName();
 
-    private final String API_KEY = "c9d5b152a06f9f0ebceb82fbace5c84c";
+    private final String API_KEY = "e0e7f86d51fd9f1c11d41bea49e14f25";
     private final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/";
 
     MovieShowFragmet movieShowFragmet;
-
-    public ArrayList<Movie> moviesAL =  new ArrayList<>();
 
     public static ArrayList<Movie> getMovie(String movielistJOStr) throws JSONException {
         ArrayList<Movie> movies = new ArrayList<>();
 
         final String RESULT = "results";
-        final String POSTER_PATH = "poster_path";
 
         JSONObject movielistJO = new JSONObject(movielistJOStr);
         JSONArray movieJsonArray = movielistJO.getJSONArray(RESULT);
 
         for (int i = 0; i < movieJsonArray.length(); i++){
             Movie movie = new Movie();
+
             JSONObject movieJson = movieJsonArray.getJSONObject(i);
-            String moviePoster = movieJson.getString(POSTER_PATH);
-            movie.setPosterUrl(moviePoster);
-            Log.d("Meeeee"+ i + " >>>>", moviePoster);
+
+            getMovieData(movie, movieJson);
+
             movies.add(movie);
         }
 
         return movies;
+    }
+
+    private static void getMovieData(Movie movie, JSONObject movieJson) throws JSONException {
+        final String POSTER_PATH = "poster_path";
+        final String ID = "id";
+        final String TITLE = "title";
+        final String VOTE_AVREAGE = "vote_average";
+        final String RELEASE_DATA = "release_date";
+        final String OVERVIEW = "overview";
+
+        int movieId = movieJson.getInt(ID);
+        movie.setId(movieId);
+
+        String moviePoster = movieJson.getString(POSTER_PATH);
+        movie.setPosterUrl(moviePoster);
+
+        String movieTilte = movieJson.getString(TITLE);
+        movie.setTitle(movieTilte);
+
+        double movieRate = movieJson.getDouble(VOTE_AVREAGE);
+        movie.setVote(movieRate);
+
+        String movieReleaseDate = movieJson.getString(RELEASE_DATA);
+        movie.setReleaseDate(movieReleaseDate);
+
+        String overView = movieJson.getString(OVERVIEW);
+        movie.setOverview(overView);
     }
 
     @Override
@@ -62,6 +87,7 @@ public class MovieDataParser extends AsyncTask<Object, Void, ArrayList<Movie> >{
         movieShowFragmet = (MovieShowFragmet) params[1];
 
         try {
+
             final String UrlStr = MOVIE_BASE_URL + type + "?api_key=" + API_KEY;
             URL url = new URL(UrlStr);
 
@@ -88,10 +114,13 @@ public class MovieDataParser extends AsyncTask<Object, Void, ArrayList<Movie> >{
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
+        }
+        finally {
+
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
+
             if (reader != null) {
                 try {
                     reader.close();
@@ -99,6 +128,7 @@ public class MovieDataParser extends AsyncTask<Object, Void, ArrayList<Movie> >{
                     e.printStackTrace();
                 }
             }
+
         }
 
         try {
@@ -112,18 +142,7 @@ public class MovieDataParser extends AsyncTask<Object, Void, ArrayList<Movie> >{
 
     @Override
     protected synchronized void onPostExecute(ArrayList<Movie> movies) {
-        if (movies != null) {
-            for (int i = 0;i <movies.size();i++) {
-                movieShowFragmet.movies.add(movies.get(i));
-                movieShowFragmet.movieAdapter.notifyItemChanged(i);
-                Log.e("m>>>>>>",movieShowFragmet.movieAdapter.getItemCount()+"");
-            }
-
-//            MovieShowFragmet movieShowFragmet = new MovieShowFragmet();
-//            movieShowFragmet.notifiyAdapt(movies);
-        }
+        movieShowFragmet.notify(movies);
     }
-
-
 
 }
