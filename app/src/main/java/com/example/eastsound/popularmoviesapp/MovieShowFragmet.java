@@ -12,16 +12,24 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.eastsound.popularmoviesapp.adapter.MovieAdapter;
 import com.example.eastsound.popularmoviesapp.model.Movie;
-import com.example.eastsound.popularmoviesapp.service.MovieDataParser;
+import com.example.eastsound.popularmoviesapp.model.Review;
+import com.example.eastsound.popularmoviesapp.model.Trailer;
+import com.example.eastsound.popularmoviesapp.service.SetupService;
+import com.example.eastsound.popularmoviesapp.service.responde.RespondMovie;
+import com.example.eastsound.popularmoviesapp.service.responde.RespondReview;
+import com.example.eastsound.popularmoviesapp.service.responde.RespondTrailer;
+
 import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MovieShowFragmet extends Fragment {
@@ -33,11 +41,11 @@ public class MovieShowFragmet extends Fragment {
 
     private MovieAdapter movieAdapter;
     boolean flag = false;
-    public MovieShowFragmet() {}
 
     @Override
     public void onStart() {
         super.onStart();
+        Log.e("mem >> ", flag + " ");
         if(flag) {
             getData();
             flag = false;
@@ -84,13 +92,6 @@ public class MovieShowFragmet extends Fragment {
         return view;
     }
 
-    private void getData() {
-        MovieDataParser movieDataParser = new MovieDataParser();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String type = preferences.getString("type", "popular");
-        movieDataParser.execute(type, this);
-    }
-
     private void setRV() {
         movieRV.setItemAnimator(new SlideInUpAnimator());
         movieRV.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -98,14 +99,44 @@ public class MovieShowFragmet extends Fragment {
         movieRV.setAdapter(movieAdapter);
     }
 
-    public void notify(ArrayList<Movie> movies) {
+    public void notifyARV(ArrayList<Movie> movies) {
         if (movies != null) {
             for (int i = 0;i < movies.size();i++) {
-                this.movies.add(movies.get(i));
+                Movie movie = movies.get(i);
+                if(movie.getPosterUrl() == null)
+                    continue;
+                this.movies.add(movie);
                 movieAdapter.notifyItemInserted(i);
             }
             movieRV.setHasFixedSize(true);
         }
     }
 
+    private void getData() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String type = preferences.getString("type", "popular");
+        getMovies(type);
+        setTitle(type);
+    }
+
+    private void getMovies(String type) {
+        SetupService.getServiceMovies.getMovies(type).enqueue(new Callback<RespondMovie>() {
+            @Override
+            public void onResponse(Call<RespondMovie> call, Response<RespondMovie> response) {
+                if(response.body() != null) {
+                    ArrayList<Movie> resopnedMovies = response.body().getMovies();
+                    notifyARV(resopnedMovies);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespondMovie> call, Throwable t) {}
+        });
+    }
+
+    private void setTitle(String type) {
+        String packageName = getActivity().getPackageName();
+        int id = getResources().getIdentifier(type, "string", packageName);
+        getActivity().setTitle(getString(id));
+    }
 }

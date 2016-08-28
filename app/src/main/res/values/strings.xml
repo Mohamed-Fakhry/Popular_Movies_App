@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Popular Movies App</string>
 
+    <string name="popular">Popular Movies App</string>
+    <string name="top_rated">Top Rate Movies App</string>
+    <string name="upcoming">Upcoming Movies App</string>
+    <string name="now_playing">Now Playing Movies App</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="list_type_key">type</string>

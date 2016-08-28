@@ -1,21 +1,15 @@
-package com.example.eastsound.popularmoviesapp.adapter;
+package com.example.eastsound.popularmoviesapp.adapter.viewholder;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.eastsound.popularmoviesapp.DetailActivity;
 import com.example.eastsound.popularmoviesapp.R;
 import com.example.eastsound.popularmoviesapp.model.Movie;
-
-import java.io.Serializable;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

@@ -3,5 +3,7 @@
     <string-array name="type_movie_values">
         <item>popular</item>
         <item>top_rated</item>
+        <item>upcoming</item>
+        <item>now_playing</item>
     </string-array>
 </resources>
