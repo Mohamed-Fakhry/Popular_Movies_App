@@ -94,7 +94,7 @@ public class MovieShowFragmet extends Fragment {
 
     private void setRV() {
         movieRV.setItemAnimator(new SlideInUpAnimator());
-        movieRV.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        movieRV.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         movieAdapter = new MovieAdapter(getActivity(), movies);
         movieRV.setAdapter(movieAdapter);
     }

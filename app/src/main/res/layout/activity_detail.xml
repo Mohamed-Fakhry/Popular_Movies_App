@@ -6,7 +6,7 @@
     tools:context=".DetailActivity">
 
     <fragment
-        android:id="@+id/fragment"
+        android:id="@+id/detailContainer"
         android:name="com.example.eastsound.popularmoviesapp.DetailFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

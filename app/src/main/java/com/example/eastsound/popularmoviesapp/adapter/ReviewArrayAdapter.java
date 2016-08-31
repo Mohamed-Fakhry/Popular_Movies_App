@@ -2,6 +2,8 @@ package com.example.eastsound.popularmoviesapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,15 +30,24 @@ public class ReviewArrayAdapter extends ArrayAdapter<Review> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View rowView = inflater.inflate(resource, parent, false);
         TextView authorTV = (TextView) rowView.findViewById(R.id.author);
         TextView contentTV = (TextView) rowView.findViewById(R.id.content);
+        TextView readMoreTV = (TextView) rowView.findViewById(R.id.readMore);
         authorTV.setText(reviews.get(position).getAuthor());
         contentTV.setText(reviews.get(position).getContent());
+        readMoreTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviews.get(position).getUrl()));
+                activity.startActivity(browserIntent);
+            }
+        });
+
         return rowView;
     }
 

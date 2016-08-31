@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.eastsound.popularmoviesapp.adapter.ReviewArrayAdapter;
@@ -54,7 +51,6 @@ public class DetailFragment extends Fragment {
     @Bind(R.id.reviewList)
         NonScrollListView reviewLV;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,13 +64,21 @@ public class DetailFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        movie = (Movie) getActivity().getIntent().getSerializableExtra("movie");
+        if (getActivity().getIntent().getSerializableExtra("movie") != null){
+            movie = (Movie) getActivity().getIntent().getSerializableExtra("movie");
+
+            displayMovie(movie);
+        }
+
+        return view;
+    }
+
+    private void displayMovie(Movie movie) {
         getTrailer(movie);
         getReview(movie);
 
         setLayoutForMD();
         getActivity().setTitle(movie.getTitle());
-        return view;
     }
 
     public void setLayoutForMD() {
