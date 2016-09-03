@@ -151,8 +151,18 @@ public class DetailFragment extends Fragment {
                 if(response.body() != null)  {
                     ArrayList<Review> reviews = response.body().getReviews();
                     movie.setReviews(reviews);
-                    if(reviews != null) {
+                    if(reviews != null && getActivity() != null) {
                         reviewArrayAdapter = new ReviewArrayAdapter(getActivity(), reviews);
+
+                        View reviewHeader =
+                                getActivity().getLayoutInflater().inflate(R.layout.header, null);
+
+                        TextView trailerTV = (TextView) reviewHeader.findViewById(R.id.head);
+                        if(reviews.size() == 0){
+                            trailerTV.setText("No reviews");
+                            reviewLV.addHeaderView(reviewHeader);
+                        }
+
                         reviewLV.setAdapter(reviewArrayAdapter);
                     }
                 }
@@ -170,7 +180,8 @@ public class DetailFragment extends Fragment {
                 if(response.body() != null) {
                     ArrayList<Trailer> trailers = response.body().getTrailers();
                     movie.setTrailers(trailers);
-                    setTrailerRV(trailers);
+                    if(trailers != null && getActivity() != null)
+                        setTrailerRV(trailers);
                 }
             }
 

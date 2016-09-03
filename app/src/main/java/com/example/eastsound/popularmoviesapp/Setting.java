@@ -34,12 +34,6 @@ public class Setting extends Activity {
         }
 
         @Override
-        public void onStart() {
-            super.onStart();
-
-        }
-
-        @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             String stringValue = newValue.toString();
 
