@@ -27,13 +27,27 @@ public class Movie implements Serializable {
     @SerializedName("overview")
     private String overview;
 
+    boolean favorite;
     private ArrayList<Trailer> trailers;
 
     private ArrayList<Review> reviews;
 
+    public Movie() {
+    }
+
+    public Movie(int id, String posterUrl, String title, double vote, String releaseDate, String overview, boolean favorite) {
+        this.id = id;
+        this.posterUrl = posterUrl;
+        this.title = title;
+        this.vote = vote;
+        this.releaseDate = releaseDate;
+        this.overview = overview;
+        this.favorite = favorite;
+    }
+
     public String getPosterUrl() {
        if(posterUrl != null) {
-           return "http://image.tmdb.org/t/p/w185/" + posterUrl;
+           return posterUrl;
        }
         return null;
     }
@@ -67,7 +81,7 @@ public class Movie implements Serializable {
     }
 
     public String getReleaseDate() {
-        return releaseDate.split("-")[0];
+        return releaseDate;
     }
 
     public void setReleaseDate(String releaseDate) {
@@ -80,6 +94,14 @@ public class Movie implements Serializable {
 
     public void setOverview(String overview) {
         this.overview = overview;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     public ArrayList<Trailer> getTrailers() {
@@ -96,5 +118,29 @@ public class Movie implements Serializable {
 
     public void setReviews(ArrayList<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        boolean flag = false;
+        if (o != null && o instanceof Movie){
+            Movie movie = (Movie) o;
+            if(this.posterUrl.equals(movie.getPosterUrl()) && this.getTitle().equals(movie.getTitle())
+                    && this.getVote() != movie.getVote() && this.getOverview().equals(movie.getOverview()))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "overview='" + overview + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", vote=" + vote +
+                ", title='" + title + '\'' +
+                ", posterUrl='" + posterUrl + '\'' +
+                ", id=" + id +
+                '}';
     }
 }

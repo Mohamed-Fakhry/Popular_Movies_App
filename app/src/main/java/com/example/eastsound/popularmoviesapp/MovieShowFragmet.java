@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.eastsound.popularmoviesapp.adapter.MovieAdapter;
+import com.example.eastsound.popularmoviesapp.database.MovieDB;
 import com.example.eastsound.popularmoviesapp.model.Movie;
 import com.example.eastsound.popularmoviesapp.model.Review;
 import com.example.eastsound.popularmoviesapp.model.Trailer;
@@ -45,7 +46,6 @@ public class MovieShowFragmet extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log.e("mem >> ", flag + " ");
         if(flag) {
             getData();
             flag = false;
@@ -78,7 +78,6 @@ public class MovieShowFragmet extends Fragment {
         if(id == R.id.setting){
             startActivity(new Intent(getActivity(), Setting.class));
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -87,8 +86,8 @@ public class MovieShowFragmet extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.movie_fragmet, container, false);
         ButterKnife.bind(this, view);
-        getData();
         setRV();
+        getData();
         return view;
     }
 
@@ -115,8 +114,18 @@ public class MovieShowFragmet extends Fragment {
     private void getData() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String type = preferences.getString("type", "popular");
-        getMovies(type);
+        if(type.equals("Fovrite")) {
+            getFovriteMovies();
+        } else
+            getMovies(type);
         setTitle(type);
+    }
+
+    private void getFovriteMovies() {
+        MovieDB movieDB = new MovieDB(getActivity());
+        movieDB.open();
+        notifyARV(movieDB.getMovies());
+        movieDB.close();
     }
 
     private void getMovies(String type) {

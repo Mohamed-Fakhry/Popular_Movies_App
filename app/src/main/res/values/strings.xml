@@ -5,7 +5,7 @@
     <string name="top_rated">Top Rate Movies App</string>
     <string name="upcoming">Upcoming Movies App</string>
     <string name="now_playing">Now Playing Movies App</string>
-
+    <string name="Fovrite">Fovrite Movies App</string>
 
     <string name="list_type_key">type</string>
 </resources>

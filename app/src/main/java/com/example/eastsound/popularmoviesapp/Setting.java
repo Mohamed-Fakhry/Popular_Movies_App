@@ -1,12 +1,14 @@
 package com.example.eastsound.popularmoviesapp;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 public class Setting extends Activity {
 
@@ -25,9 +27,16 @@ public class Setting extends Activity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.type);
-            findPreference(getString(R.string.list_type_key))
-                    .setSummary(PreferenceManager.getDefaultSharedPreferences(getActivity())
+            Preference preference =           findPreference(getString(R.string.list_type_key));
+            preference.setOnPreferenceChangeListener(this);
+            preference  .setSummary(PreferenceManager.getDefaultSharedPreferences(getActivity())
                         .getString(getString(R.string.list_type_key), "popular"));
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+
         }
 
         @Override
@@ -39,11 +48,11 @@ public class Setting extends Activity {
                 int prefIndex = listPreference.findIndexOfValue(stringValue);
                 if (prefIndex >= 0) {
                     preference.setSummary(listPreference.getEntry());
-                    preference.setSummary(stringValue);
                 }
-            } else {
-                preference.setSummary(stringValue);
             }
+            preference.setSummary(stringValue);
+
+
 
             return true;
         }

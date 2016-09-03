@@ -35,11 +35,11 @@ public class TrailerArrayAdapter extends ArrayAdapter<Trailer> {
     public View getView(int position, View convertView, ViewGroup parent) {
        LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         View rowView = inflater.inflate(resource, parent, false);
         TextView trailerNameTV = (TextView) rowView.findViewById(R.id.trailerName);
-        trailerNameTV.setText(trailers.get(position).getName());
-
+        if(trailers.get(position) != null) {
+            trailerNameTV.setText(trailers.get(position).getName());
+        }
         return rowView;
     }
 

@@ -36,7 +36,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
     public void setMovieView(Movie movieView){
         if (posterIV != null){
             Glide.with(activity)
-                    .load(movieView.getPosterUrl())
+                    .load("http://image.tmdb.org/t/p/w185/" + movieView.getPosterUrl())
                     .asBitmap()
                     .into(posterIV);
 
@@ -48,8 +48,13 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
         posterIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, DetailActivity.class).putExtra("movie",  movie);
-                activity.startActivity(intent);
+                if(activity.findViewById(R.id.detailContainer) != null) {
+                    ((AppCompatActivity)activity).getSupportFragmentManager()
+                            .beginTransaction().replace(R.id.detailContainer, DetailFragment.newInstance(movie)).commit();
+                } else {
+                    Intent intent = new Intent(activity, DetailActivity.class).putExtra("movie",  movie);
+                    activity.startActivity(intent);
+                }
             }
         });
     }

@@ -15,11 +15,10 @@
         android:layout_height="match_parent"
         tools:layout="@layout/movie_fragmet" />
 
-    <fragment class="com.example.eastsound.popularmoviesapp.DetailFragment"
+    <FrameLayout
         android:id="@+id/detailContainer"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_detail" />
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

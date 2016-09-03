@@ -39,11 +39,11 @@
                         android:id="@+id/movieTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:maxLines="2"
                         android:textColor="#fff"
                         android:textSize="25dp"
                         android:layout_centerVertical="true"
                         android:text=""/>
-
 
                     <TextView
                         android:id="@+id/movieDate"
@@ -61,8 +61,18 @@
                         android:textColor="#fff"
                         android:textSize="15dp"/>
 
+                    <ToggleButton
+                        android:id="@+id/favoriteToggleBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:textOn="Favorite"
+                        android:textOff="Make Favorite"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="invisible"/>
+
                 </LinearLayout>
             </LinearLayout>
+
 
             <TextView
                 android:id="@+id/overviewMovie"
