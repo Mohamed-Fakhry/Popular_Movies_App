@@ -24,7 +24,10 @@ import com.example.eastsound.popularmoviesapp.service.responde.RespondMovie;
 import com.example.eastsound.popularmoviesapp.service.responde.RespondReview;
 import com.example.eastsound.popularmoviesapp.service.responde.RespondTrailer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
@@ -40,7 +43,7 @@ public class MovieShowFragmet extends Fragment {
 
     ArrayList<Movie> movies = new ArrayList<>();
 
-    private MovieAdapter movieAdapter;
+    private MovieAdapter movieAdapter = new MovieAdapter(getActivity(), movies);;
     boolean flag = false;
 
     @Override
@@ -56,6 +59,18 @@ public class MovieShowFragmet extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        if (savedInstanceState != null) {
+            List<Movie> results = (List<Movie>) savedInstanceState.getSerializable("myKey");
+            movies.clear();
+            movies.addAll(results);
+            movieAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("myKey", movies);
     }
 
     @Override
