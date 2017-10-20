@@ -2,6 +2,7 @@ package com.example.eastsound.popularmoviesapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.eastsound.popularmoviesapp.adapter.MovieAdapter;
+import com.example.eastsound.popularmoviesapp.database.MovieContract;
 import com.example.eastsound.popularmoviesapp.database.MovieDB;
 import com.example.eastsound.popularmoviesapp.model.Movie;
 import com.example.eastsound.popularmoviesapp.model.Review;
@@ -39,20 +41,20 @@ import retrofit2.Response;
 public class MovieShowFragmet extends Fragment {
 
     @Bind(R.id.moviesRV)
-        RecyclerView movieRV;
+    RecyclerView movieRV;
 
     ArrayList<Movie> movies = new ArrayList<>();
 
     private MovieAdapter movieAdapter = new MovieAdapter(getActivity(), movies);;
-    boolean flag = false;
+//    boolean flag = false;
 
     @Override
     public void onStart() {
         super.onStart();
-        if(flag) {
-            getData();
-            flag = false;
-        }
+//        if(flag) {
+//            getData();
+//            flag = false;
+//        }
     }
 
     @Override
@@ -60,10 +62,8 @@ public class MovieShowFragmet extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (savedInstanceState != null) {
-            List<Movie> results = (List<Movie>) savedInstanceState.getSerializable("myKey");
             movies.clear();
-            movies.addAll(results);
-            movieAdapter.notifyDataSetChanged();
+            movies = (ArrayList<Movie>) savedInstanceState.getSerializable("myKey");
         }
     }
 
@@ -89,7 +89,7 @@ public class MovieShowFragmet extends Fragment {
             }
             movieAdapter.notifyItemRangeRemoved(0, size);
         }
-        flag = true;
+
         if(id == R.id.setting){
             startActivity(new Intent(getActivity(), Setting.class));
         }
@@ -102,8 +102,14 @@ public class MovieShowFragmet extends Fragment {
         View view = inflater.inflate(R.layout.movie_fragmet, container, false);
         ButterKnife.bind(this, view);
         setRV();
-        getData();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (movies == null|| movies.isEmpty())
+            getData();
     }
 
     private void setRV() {
@@ -137,10 +143,8 @@ public class MovieShowFragmet extends Fragment {
     }
 
     private void getFovriteMovies() {
-        MovieDB movieDB = new MovieDB(getActivity());
-        movieDB.open();
-        notifyARV(movieDB.getMovies());
-        movieDB.close();
+        notifyARV(MovieDB.getMovies(getActivity().getContentResolver()
+                .query(MovieContract.CONTENT_URI, null, null, null, null)));
     }
 
     private void getMovies(String type) {

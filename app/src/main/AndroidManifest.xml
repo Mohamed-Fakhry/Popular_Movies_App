@@ -20,6 +20,10 @@
         </activity>
         <activity android:name=".DetailActivity" />
         <activity android:name=".Setting"></activity>
+        <provider
+            android:authorities="com.example.eastsound.popularmoviesapp"
+            android:name=".database.MovieDB"
+            android:exported="false"/>
     </application>
 
 </manifest>
