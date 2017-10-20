@@ -62,7 +62,8 @@ public class DetailFragment extends Fragment {
     public static DetailFragment newInstance(Movie movie) {
         DetailFragment detailFragment = new DetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("movie", movie);
+        bundle.putParcelable("movie", movie);
+        Log.d("test", movie.toString());
         detailFragment.setArguments(bundle);
         return detailFragment;
     }
@@ -71,8 +72,9 @@ public class DetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            movie = (Movie) getArguments().getSerializable("movie");
+            movie = getArguments().getParcelable("movie");
         } catch (Exception e) {
+            Log.d("test", e.getMessage());
         }
     }
 

@@ -1,14 +1,15 @@
 package com.example.eastsound.popularmoviesapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by Mohamed Fakhry on 02/08/2016.
- */
-public class Movie implements Serializable {
+public class Movie implements Parcelable {
+
     @SerializedName("id")
     private int id;
 
@@ -28,6 +29,7 @@ public class Movie implements Serializable {
     private String overview;
 
     boolean favorite;
+
     private ArrayList<Trailer> trailers;
 
     private ArrayList<Review> reviews;
@@ -143,4 +145,46 @@ public class Movie implements Serializable {
                 ", id=" + id +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.posterUrl);
+        dest.writeString(this.title);
+        dest.writeDouble(this.vote);
+        dest.writeString(this.releaseDate);
+        dest.writeString(this.overview);
+        dest.writeByte(this.favorite ? (byte) 1 : (byte) 0);
+        dest.writeTypedList(this.trailers);
+        dest.writeTypedList(this.reviews);
+    }
+
+    protected Movie(Parcel in) {
+        this.id = in.readInt();
+        this.posterUrl = in.readString();
+        this.title = in.readString();
+        this.vote = in.readDouble();
+        this.releaseDate = in.readString();
+        this.overview = in.readString();
+        this.favorite = in.readByte() != 0;
+        this.trailers = in.createTypedArrayList(Trailer.CREATOR);
+        this.reviews = in.createTypedArrayList(Review.CREATOR);
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

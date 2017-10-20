@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.eastsound.popularmoviesapp.adapter.MovieAdapter;
 import com.example.eastsound.popularmoviesapp.database.MovieContract;
 import com.example.eastsound.popularmoviesapp.database.MovieDB;
@@ -45,16 +48,14 @@ public class MovieShowFragmet extends Fragment {
 
     ArrayList<Movie> movies = new ArrayList<>();
 
-    private MovieAdapter movieAdapter = new MovieAdapter(getActivity(), movies);;
-//    boolean flag = false;
+    int position;
+    private MovieAdapter movieAdapter = new MovieAdapter(getActivity(), movies);
+    private GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
 
     @Override
     public void onStart() {
         super.onStart();
-//        if(flag) {
-//            getData();
-//            flag = false;
-//        }
+        setRV();
     }
 
     @Override
@@ -63,14 +64,16 @@ public class MovieShowFragmet extends Fragment {
         setHasOptionsMenu(true);
         if (savedInstanceState != null) {
             movies.clear();
-            movies = (ArrayList<Movie>) savedInstanceState.getSerializable("myKey");
+            movies = savedInstanceState.getParcelableArrayList("myKey");
+            position = savedInstanceState.getInt("position");
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("myKey", movies);
+        outState.putInt("position", gridLayoutManager.findFirstVisibleItemPosition());
+        outState.putParcelableArrayList("myKey", movies);
     }
 
     @Override
@@ -83,14 +86,14 @@ public class MovieShowFragmet extends Fragment {
         int id = item.getItemId();
         int size = movies.size();
 
-        if(size != 0) {
+        if (size != 0) {
             for (int i = 0; i < size; i++) {
                 movies.remove(0);
             }
             movieAdapter.notifyItemRangeRemoved(0, size);
         }
 
-        if(id == R.id.setting){
+        if (id == R.id.setting) {
             startActivity(new Intent(getActivity(), Setting.class));
         }
         return super.onOptionsItemSelected(item);
@@ -101,29 +104,28 @@ public class MovieShowFragmet extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.movie_fragmet, container, false);
         ButterKnife.bind(this, view);
-        setRV();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (movies == null|| movies.isEmpty())
+        if (movies == null || movies.isEmpty())
             getData();
     }
 
     private void setRV() {
-        movieRV.setItemAnimator(new SlideInUpAnimator());
-        movieRV.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        movieRV.setLayoutManager(gridLayoutManager);
         movieAdapter = new MovieAdapter(getActivity(), movies);
         movieRV.setAdapter(movieAdapter);
+        movieRV.getLayoutManager().scrollToPosition(position);
     }
 
     public void notifyARV(ArrayList<Movie> movies) {
         if (movies != null) {
-            for (int i = 0;i < movies.size();i++) {
+            for (int i = 0; i < movies.size(); i++) {
                 Movie movie = movies.get(i);
-                if(movie.getPosterUrl() == null)
+                if (movie.getPosterUrl() == null)
                     continue;
                 this.movies.add(movie);
                 movieAdapter.notifyItemInserted(i);
@@ -135,7 +137,7 @@ public class MovieShowFragmet extends Fragment {
     private void getData() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String type = preferences.getString("type", "popular");
-        if(type.equals("Fovrite")) {
+        if (type.equals("Fovrite")) {
             getFovriteMovies();
         } else
             getMovies(type);
@@ -151,14 +153,15 @@ public class MovieShowFragmet extends Fragment {
         SetupService.getServiceMovies.getMovies(type).enqueue(new Callback<RespondMovie>() {
             @Override
             public void onResponse(Call<RespondMovie> call, Response<RespondMovie> response) {
-                if(response.body() != null) {
+                if (response.body() != null) {
                     ArrayList<Movie> resopnedMovies = response.body().getMovies();
                     notifyARV(resopnedMovies);
                 }
             }
 
             @Override
-            public void onFailure(Call<RespondMovie> call, Throwable t) {}
+            public void onFailure(Call<RespondMovie> call, Throwable t) {
+            }
         });
     }
 

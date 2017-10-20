@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:background="#fff"
-    android:layout_height="wrap_content">
-    <LinearLayout
-        android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@drawable/icon_play" />
+
+    <TextView
+        android:id="@+id/trailerName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:src="@drawable/icon_play"
-            android:layout_width="75dp"
-            android:layout_height="75dp"/>
-
-        <TextView
-            android:id="@+id/trailerName"
-            android:text="Trailer name"
-            android:textColor="@color/colorPrimary"
-            android:textSize="25dp"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25sp"
+        tools:text="Trailer name" />
 </LinearLayout>

@@ -5,11 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".DetailActivity">
 
-    <fragment
+    <FrameLayout
         android:id="@+id/detailContainer"
-        android:name="com.example.eastsound.popularmoviesapp.DetailFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_detail" />
-
 </RelativeLayout>

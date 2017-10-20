@@ -1,13 +1,13 @@
 package com.example.eastsound.popularmoviesapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by Mohamed Fakhry  on 27/08/2016.
- */
-public class Review implements Serializable {
+public class Review implements Parcelable {
     @SerializedName("author")
     private String author;
 
@@ -40,4 +40,37 @@ public class Review implements Serializable {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.author);
+        dest.writeString(this.content);
+        dest.writeString(this.url);
+    }
+
+    public Review() {
+    }
+
+    protected Review(Parcel in) {
+        this.author = in.readString();
+        this.content = in.readString();
+        this.url = in.readString();
+    }
+
+    public static final Parcelable.Creator<Review> CREATOR = new Parcelable.Creator<Review>() {
+        @Override
+        public Review createFromParcel(Parcel source) {
+            return new Review(source);
+        }
+
+        @Override
+        public Review[] newArray(int size) {
+            return new Review[size];
+        }
+    };
 }

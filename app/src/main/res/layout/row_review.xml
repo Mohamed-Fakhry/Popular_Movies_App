@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_margin="10dp"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/author"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@drawable/top_review_background"
-        android:text="Mohamed"
+        android:maxLines="1"
         android:padding="5dp"
-        android:textSize="25dp"
-        android:textColor="#fff"
-        android:maxLines="1"/>
+        android:textColor="@android:color/white"
+        android:textSize="25sp"
+        tools:text="Mohamed" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/bottom_review_background">
+        android:background="@drawable/bottom_review_background"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope."
-            android:textSize="20dp"
             android:maxLines="10"
-            android:padding="10dp"/>
+            android:padding="8dp"
+            tools:text="Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope."
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/readMore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Read more"
-            android:textSize="15dp"
-            android:layout_gravity="right"
-            android:padding="10dp"
-            />
+            android:layout_gravity="end"
+            android:padding="8dp"
+            android:text="@string/read_more"
+            android:textSize="15sp" />
     </LinearLayout>
-
-
 </LinearLayout>

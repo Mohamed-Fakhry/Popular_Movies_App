@@ -8,4 +8,7 @@
     <string name="Fovrite">Fovrite Movies App</string>
 
     <string name="list_type_key">type</string>
+    <string name="favorite">Favorite</string>
+    <string name="make_favorite">Make Favorite</string>
+    <string name="read_more">Read more</string>
 </resources>
