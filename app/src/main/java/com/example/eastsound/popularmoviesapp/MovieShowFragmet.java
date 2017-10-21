@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,13 +53,7 @@ public class MovieShowFragmet extends Fragment {
 
     int position;
     private MovieAdapter movieAdapter = new MovieAdapter(getActivity(), movies);
-    private GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        setRV();
-    }
+    private GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +93,7 @@ public class MovieShowFragmet extends Fragment {
         if (id == R.id.setting) {
             startActivity(new Intent(getActivity(), Setting.class));
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -110,6 +108,7 @@ public class MovieShowFragmet extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        setRV();
         if (movies == null || movies.isEmpty())
             getData();
     }
@@ -118,7 +117,8 @@ public class MovieShowFragmet extends Fragment {
         movieRV.setLayoutManager(gridLayoutManager);
         movieAdapter = new MovieAdapter(getActivity(), movies);
         movieRV.setAdapter(movieAdapter);
-        movieRV.getLayoutManager().scrollToPosition(position);
+        movieRV.scrollToPosition(position);
+        Log.d("position", position + "");
     }
 
     public void notifyARV(ArrayList<Movie> movies) {
